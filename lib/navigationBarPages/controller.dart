@@ -5,7 +5,7 @@ class ControllerPage extends StatelessWidget {
   ControllerPage({super.key});
 
   final MQTTManager _myClient = MQTTManager(
-      host: '169.254.222.162', topic: '22205245/anawen/device/test');
+      host: 'loalhost ', topic: '22205245/anawen/device/test');
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +28,11 @@ class ControllerPage extends StatelessWidget {
                 buildControllerButton('Subscribe', Icons.holiday_village,
                     () => _myClient.subscribe()),
                 SizedBox(
-                  width: 20,
+                  width: 15,
                   height: 20,
                 ),
                 buildControllerButton(
-                    'Unsubscribe',
+                    'Unsubscrib',
                     Icons.accessibility_new_rounded,
                     () => _myClient.unsubscribe())
               ],
@@ -43,14 +43,14 @@ class ControllerPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                buildControllerButton('  OK          ', Icons.holiday_village,
+                buildControllerButton('  OK        ', Icons.holiday_village,
                     () => _myClient.publishMessage('Corre função 2 modo OK')),
                 SizedBox(
                   width: 20,
                   height: 20,
                 ),
                 buildControllerButton(
-                    'NOT OK       ',
+                    'NOT OK     ',
                     Icons.maps_home_work,
                     () =>
                         _myClient.publishMessage('Corre função 3 modo NOT OK')),
@@ -63,9 +63,9 @@ class ControllerPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 buildControllerButton(
-                    'Unsubscribe',
+                    'Disconnect',
                     Icons.accessibility_new_rounded,
-                    () => _myClient.unsubscribe())
+                    () => _myClient.disconnect())
               ],
             ),
             SizedBox(
