@@ -1,8 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:mqtt_client/mqtt_client.dart';
-import 'package:mqtt_client/mqtt_client.dart';
 import 'navigationBarPages/main_page.dart';
 
 void main() {
@@ -14,7 +11,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var colorScheme = ColorScheme.fromSeed(seedColor: Colors.white10);
+    var colorScheme = ColorScheme.fromSeed(seedColor: Colors.white);
     return MaterialApp(
       title: 'Navigation demo',
       theme: ThemeData(

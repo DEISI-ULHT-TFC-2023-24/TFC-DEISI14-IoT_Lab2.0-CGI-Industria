@@ -23,10 +23,14 @@ class _MainPagesState extends State<MainPages> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Icon(
-                Icons.account_circle_rounded, size: 24, color: Colors.white,
+                Icons.account_circle_rounded,
+                size: 24,
+                color: Colors.white,
               ),
               SizedBox(width: 20),
-              Text('Assets', style: TextStyle(height: 50),
+              Text(
+                'Assets',
+                style: TextStyle(height: 50),
               ),
             ],
           ),
