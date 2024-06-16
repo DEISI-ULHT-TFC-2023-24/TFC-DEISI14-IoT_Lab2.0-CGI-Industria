@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -13,9 +15,10 @@ class HomePage extends StatelessWidget {
     double spaceBetweenBlocksAndTabs = 40.0;
 
     return DefaultTabController(
-      length: 3,
+      length: 3, // Número de abas
       child: Scaffold(
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top: 55.0),
@@ -51,9 +54,9 @@ class HomePage extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  IngredientsList(),
-                  ProcessProgressWidget(),
-                  Center(child: Text('Conteúdo do Bloco 3')),
+                  FirebaseDataList(), // Conteúdo da aba "Bloco 1"
+                  TaskTemperatureWidget(), // Conteúdo da aba "Bloco 2"
+                  Center(child: Text('Conteúdo do Bloco 3')), // Conteúdo da aba "Bloco 3"
                 ],
               ),
             ),
@@ -63,23 +66,27 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  // Método para construir um bloco
   Widget _buildBlock(String title, double size) {
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
         color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(8.0),
         border: Border.all(color: Color(0xFF7A2119)),
       ),
       child: Center(
         child: Text(
           title,
           style: TextStyle(fontSize: 14, color: Colors.black),
+          textAlign: TextAlign.center,
         ),
       ),
     );
   }
 
+  // Método para construir uma linha
   Widget _buildLine(double length, double thickness) {
     return Container(
       height: thickness,
@@ -88,6 +95,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  // Método para construir linhas paralelas
   Widget _buildParallelLines(double length, double thickness, double spacing) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -107,12 +115,14 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  // Método para construir um bloco com ícone
   Widget _buildIconBlock(double size) {
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
         color: Color(0xFF4B140C),
+        borderRadius: BorderRadius.circular(8.0),
         border: Border.all(color: Color(0xFF7A2119)),
       ),
       child: Center(
@@ -126,66 +136,109 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class IngredientsList extends StatelessWidget {
-  final List<String> ingredients = [
-    'Açúcar',
+// Widget para ler dados do Firebase Realtime Database para a aba "Bloco 1"
+class FirebaseDataList extends StatefulWidget {
+  @override
+  _FirebaseDataListState createState() => _FirebaseDataListState();
+}
+
+class _FirebaseDataListState extends State<FirebaseDataList> {
+  final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
+  Map<dynamic, dynamic> _data = {};
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        _databaseReference.child("listNode").onChildAdded.listen((data){
+        print(data);
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _data.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+        itemCount: _data.length,
+        itemBuilder: (context, index) {
+          String key = _data.keys.elementAt(index);
+          return ListTile(
+            title: Text('$key: ${_data[key]}'),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// Widget da lista de tarefas e temperatura para a aba "Bloco 2"
+class TaskTemperatureWidget extends StatefulWidget {
+  @override
+  _TaskTemperatureWidgetState createState() => _TaskTemperatureWidgetState();
+}
+
+class _TaskTemperatureWidgetState extends State<TaskTemperatureWidget> {
+  final List<String> tasks = [
+    'O laaa',
     'Leite',
     'Cacau',
     'Manteiga',
     'Leite Condensado',
     'Amêndoas'
   ];
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: ingredients.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(
-            ingredients[index],
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          subtitle: Text('${index + 1}º ingrediente'),
-        );
-      },
-    );
-  }
-}
-
-class ProcessProgressWidget extends StatefulWidget {
-  @override
-  _ProcessProgressWidgetState createState() => _ProcessProgressWidgetState();
-}
-
-class _ProcessProgressWidgetState extends State<ProcessProgressWidget> {
-  double processCompletion = 0.0;
+  final List<bool> _isChecked = List<bool>.filled(6, false);
+  int _completedTasks = 0;
   double currentTemperature = 10.0;
-  List<Map<String, dynamic>> processStages = [
-    {'title': 'Entrada dos ingredientes', 'isCompleted': false},
-    {'title': 'Junção dos Ingredientes', 'isCompleted': false},
-    {'title': 'Fase de mistura', 'isCompleted': false},
-    {'title': 'finalizado para ser embalado', 'isCompleted': false},
-    // Adicione mais fases conforme necessário
-  ];
+  bool isIncreasing = true;
+  late Timer _temperatureTimer;
+  late Timer _taskTimer;
 
-  void _updateProgress() {
-    setState(() {
-      processCompletion += 0.1;
-      if (processCompletion > 1.0) {
-        processCompletion = 1.0;
-      }
-      currentTemperature += 5.0;
+  @override
+  void initState() {
+    super.initState();
+    _startTemperatureUpdate();
+    _startTaskUpdate();
+  }
 
-      // Atualiza o estado de conclusão das fases
-      for (int i = 0; i < processStages.length; i++) {
-        processStages[i]['isCompleted'] =
-            processCompletion > (i + 1) / processStages.length;
-      }
+  // Método para iniciar a atualização da temperatura
+  void _startTemperatureUpdate() {
+    _temperatureTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (isIncreasing) {
+          currentTemperature += 1.0;
+          if (currentTemperature >= 250.0) {
+            isIncreasing = false;
+          }
+        } else {
+          currentTemperature -= 1.0;
+          if (currentTemperature <= 10.0) {
+            isIncreasing = true;
+          }
+        }
+      });
     });
+  }
+
+  // Método para iniciar a atualização das tarefas
+  void _startTaskUpdate() {
+    _taskTimer = Timer.periodic(Duration(seconds: 2), (timer) {
+      setState(() {
+        if (_completedTasks < tasks.length) {
+          _isChecked[_completedTasks] = true;
+          _completedTasks++;
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _temperatureTimer.cancel();
+    _taskTimer.cancel();
+    super.dispose();
   }
 
   @override
@@ -193,77 +246,66 @@ class _ProcessProgressWidgetState extends State<ProcessProgressWidget> {
     return Padding(
       padding: EdgeInsets.all(10.0),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Conclusão do Processo',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-              IconButton(
-                icon: Icon(Icons.refresh),
-                onPressed: _updateProgress,
-              ),
-            ],
+          Expanded(
+            child: ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                  title: Text(tasks[index]),
+                  value: _isChecked[index],
+                  onChanged: null, // Desativado para tornar automático
+                );
+              },
+            ),
           ),
-          LinearProgressIndicator(
-            value: processCompletion,
-            backgroundColor: Colors.grey[300],
-            valueColor:
-                AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                LinearProgressIndicator(
+                  value: _completedTasks / tasks.length,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  '${(_completedTasks / tasks.length * 100).toInt()}% Completo',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  _completedTasks == tasks.length ? 'Mix Completo!' : '',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: _completedTasks == tasks.length ? Colors.green : Colors.transparent,
+                  ),
+                ),
+              ],
+            ),
           ),
-          Text('${(processCompletion * 100).toStringAsFixed(0)}%'),
-          ...processStages
-              .map((stage) => ProcessStageIndicator(
-                    title: stage['title'],
-                    isCompleted: stage['isCompleted'],
-                  ))
-              .toList(),
-          SizedBox(height: 35),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.thermostat_outlined, size: 24),
-              SizedBox(width: 8),
-              Text(
-                'Temperatura Atual ${currentTemperature.toInt()}°',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ],
+          Container(
+            padding: EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+              color: Colors.red[50],
+              borderRadius: BorderRadius.circular(8.0),
+              border: Border.all(color: Colors.red),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.thermostat_outlined, size: 24, color: Colors.red),
+                SizedBox(width: 8),
+                Text(
+                  'Temperatura Atual: ${currentTemperature.toInt()}°',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class ProcessStageIndicator extends StatelessWidget {
-  final String title;
-  final bool isCompleted;
-
-  const ProcessStageIndicator({
-    Key? key,
-    required this.title,
-    this.isCompleted = false,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        children: [
-          Icon(
-            isCompleted
-                ? Icons.check_circle_outline
-                : Icons.radio_button_unchecked,
-            size: 20,
-            color: isCompleted ? Colors.green : Colors.grey,
-          ),
-          SizedBox(width: 8),
-          Expanded(child: Text(title)),
         ],
       ),
     );

@@ -5,19 +5,41 @@ class ControllerPage extends StatelessWidget {
   ControllerPage({super.key});
 
   final MQTTManager _myClient = MQTTManager(
-      host: 'loalhost ', topic: '22205245/anawen/device/test');
+      host: '169.254.222.162', topic: '22205245/anawen/device/test');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //appBar: AppBar(title: Text(navigationsBarList[2].title),),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              'Controller',
-              style: TextStyle(fontSize: 25),
+            const Padding(
+              padding: EdgeInsets.only(top: 25, bottom: 25),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: Divider(
+                      thickness: 1,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      'Controll Options',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      thickness: 1,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: 15,
@@ -73,7 +95,6 @@ class ControllerPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 

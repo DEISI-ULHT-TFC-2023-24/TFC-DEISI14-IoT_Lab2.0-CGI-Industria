@@ -15,28 +15,30 @@ class _MainPagesState extends State<MainPages> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(55),
-        // Mude esta linha para definir a altura desejada
-
+        preferredSize: Size.fromHeight(50), // Aumenta a altura do AppBar
         child: AppBar(
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(
-                Icons.account_circle_rounded,
-                size: 24,
-                color: Colors.white,
-              ),
-              SizedBox(width: 20),
-              Text(
-                'Assets',
-                style: TextStyle(height: 50),
-              ),
-            ],
+          title: Padding(
+            padding: const EdgeInsets.only(top: 30),
+            // Ajusta o título para baixo
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.account_circle_rounded,
+                  size: 24,
+                  color: Colors.black,
+                ),
+                SizedBox(width: 20),
+                Text(
+                  'Assets',
+                  style: TextStyle(
+                      color:
+                          Colors.black), // Ajuste para sua preferência de cor
+                ),
+              ],
+            ),
           ),
           actions: <Widget>[
-            // Usando IconButton para permitir toques na imagem, caso necessário.
-
             IconButton(
               icon: Icon(Icons.search),
               onPressed: () {
