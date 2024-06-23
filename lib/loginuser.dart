@@ -15,7 +15,7 @@ class _LoginUserState extends State<LoginUser> {
   final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
   final _formKey = GlobalKey<FormState>(); // Chave para identificar o formulário
 
- @override
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -53,8 +53,8 @@ class _LoginUserState extends State<LoginUser> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Welcome',
-                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                        'Bem-Vindo!',
+                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF7A2119)),
                       ),
                     ),
                   ),
@@ -63,7 +63,7 @@ class _LoginUserState extends State<LoginUser> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Please login to your account',
+                        'Por favor, faça login da conta',
                         style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     ),
@@ -71,48 +71,41 @@ class _LoginUserState extends State<LoginUser> {
                   SizedBox(height: 30),
                   TextFormField(
                     decoration: const InputDecoration(
-                      labelText: 'Username',
-                      prefixIcon: Icon(Icons.person),
+                      labelText: 'Nº do utilizador',
+                      prefixIcon: Icon(Icons.person,  color: Colors.black),
                       border: OutlineInputBorder(),
                     ),
-
-
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Por favor, insira o Username';
+                        return 'Por favor, insira o Nº do utilizador';
                       } else if (value != "U4567") {
-                        return 'Username incorreto';
+                        return 'Nº do utilizador incorreto';
                       }
                       return null;
                     },
                   ),
-
-
                   SizedBox(height: 25),
                   TextFormField(
                     obscureText: true,
                     decoration: const InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock),
+                      labelText: 'Palavra-Passe',
+                      prefixIcon: Icon(Icons.lock, color: Colors.black),
                       border: OutlineInputBorder(),
                     ),
-
-
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Por favor, insira Password';
+                        return 'Por favor, insira a Palavra-Passe';
                       } else if (value != "12345") {
-                        return 'Password incorreta';
+                        return 'Palavra-Passe incorreta';
                       }
                       return null;
                     },
                   ),
-
                   SizedBox(height: 30),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent, // Background color
-                      minimumSize: Size.fromHeight(50), // Button size
+                      backgroundColor: Color(0xFF7A2119), // Cor de fundo
+                      minimumSize: Size.fromHeight(50), // Tamanho do botão
                     ),
                     onPressed: () {
                       // Validate retorna true se o formulário é válido, ou seja, todos os campos passaram pelas validações
@@ -123,12 +116,12 @@ class _LoginUserState extends State<LoginUser> {
                         );
                       }
                     },
-                    child: const Text('Sign In', style: TextStyle(fontSize: 18)),
+                    child: const Text('Entrar', style: TextStyle(fontSize: 18, color: Colors.white)),
                   ),
                   SizedBox(height: 20),
                   TextButton(
                     onPressed: () {},
-                    child: const Text('Forgot Password? Contact Your Manager'),
+                    child: const Text('    Esqueceste a Palavra-Passe?\nEntre em contacto com a empresa', style: TextStyle(color: Colors.grey)),
                   ),
                 ],
               ),

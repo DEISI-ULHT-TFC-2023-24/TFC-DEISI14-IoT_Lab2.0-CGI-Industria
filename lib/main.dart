@@ -7,7 +7,6 @@ import 'package:tfc_industria/navigationBarPages/base.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    name: 'IOT-Industria',
       options: FirebaseOptions(
         databaseURL: "https://flutter-firebase-tfc-e46ac-default-rtdb.europe-west1.firebasedatabase.app",
     apiKey: 'AIzaSyABPtBXhd8RwisgvTsnyl3c8GlJqSKnqfs',

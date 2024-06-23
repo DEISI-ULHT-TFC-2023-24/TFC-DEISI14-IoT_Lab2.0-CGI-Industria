@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'mqttConfigure.dart';
 
 class ControllerPage extends StatelessWidget {
@@ -12,89 +13,115 @@ class ControllerPage extends StatelessWidget {
     return Scaffold(
       //appBar: AppBar(title: Text(navigationsBarList[2].title),),
       body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 25, bottom: 25),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: Divider(
-                      thickness: 1,
-                      color: Colors.black,
-                    ),
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 25, bottom: 25),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Divider(
+                    thickness: 1,
+                    color: Color(0xFF7A2119),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      'Controll Options',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    'Fonte do Controlo',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF7A2119)),
                   ),
-                  Expanded(
-                    child: Divider(
-                      thickness: 1,
-                      color: Colors.black,
-                    ),
+                ),
+                Expanded(
+                  child: Divider(
+                    thickness: 1,
+                    color: Color(0xFF7A2119),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            SizedBox(
-              height: 15,
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              'Opções de Subscrição/Ligação',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Row(
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                buildControllerButton('Subscribe', Icons.holiday_village,
-                    () => _myClient.subscribe()),
+                buildControllerButton('Subscribe', MdiIcons.timelinePlus,
+                        () => _myClient.subscribe()),
                 SizedBox(
                   width: 15,
-                  height: 20,
                 ),
-                buildControllerButton(
-                    'Unsubscrib',
-                    Icons.accessibility_new_rounded,
-                    () => _myClient.unsubscribe())
+                buildControllerButton('Unsubscrib', MdiIcons.timelineMinus,
+                        () => _myClient.unsubscribe())
               ],
             ),
-            SizedBox(
-              height: 10,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              'Opções de Funcionamento',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Row(
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                buildControllerButton('  OK        ', Icons.holiday_village,
-                    () => _myClient.publishMessage('Corre função 2 modo OK')),
+                buildControllerButton('  OK        ', MdiIcons.stickerCheck,
+                        () => _myClient.publishMessage('Corre função 2 modo OK')),
                 SizedBox(
-                  width: 20,
-                  height: 20,
+                  width: 15,
                 ),
-                buildControllerButton(
-                    'NOT OK     ',
-                    Icons.maps_home_work,
-                    () =>
-                        _myClient.publishMessage('Corre função 3 modo NOT OK')),
+                buildControllerButton('NOT OK     ', MdiIcons.stickerAlert,
+                        () => _myClient.publishMessage('Corre função 3 modo NOT OK')),
               ],
             ),
-            SizedBox(
-              height: 10,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              'Opção de Fechar a Ligação',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Row(
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 buildControllerButton(
                     'Disconnect',
-                    Icons.accessibility_new_rounded,
-                    () => _myClient.disconnect())
+                    MdiIcons.lanDisconnect,
+                        () => _myClient.disconnect()),
               ],
             ),
-            SizedBox(
-              height: 15,
-            ),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+        ],
+      ),
     );
   }
 
@@ -102,17 +129,14 @@ class ControllerPage extends StatelessWidget {
       String label, IconData iconData, VoidCallback onPressed) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      // Ajuste o preenchimento conforme necessário
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 13.0),
-        // Aumenta o espaço dentro do botão
         decoration: BoxDecoration(
           color: Colors.grey[200], // Define a cor de fundo cinza
           borderRadius: BorderRadius.circular(10.0), // Cantos arredondados
           border: Border.all(
               color: Colors.black,
-              width:
-                  2), // Mantém a borda como está, mas ajusta a largura conforme necessário
+              width: 2), // Mantém a borda como está, mas ajusta a largura conforme necessário
         ),
         child: TextButton(
           onPressed: () {
@@ -125,9 +149,8 @@ class ControllerPage extends StatelessWidget {
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            // Para garantir que o conteúdo não estique além do necessário
             children: [
-              Icon(iconData), // O ícone que você deseja
+              Icon(iconData, color: Color(0xFF7A2119)), // Ícone vermelho
               SizedBox(width: 10), // Um pequeno espaço entre o ícone e o texto
               Text(label), // O texto que você deseja exibir
             ],
