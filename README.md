@@ -32,7 +32,7 @@
 
 
 ## **Configuração**
-### Arduino
+### => Arduino IDE
 
 1. Instalar o Arduino IDE.
 2. Abrir o Arduino IDE.
@@ -53,7 +53,7 @@
     #include <WiFiS3.h>
     #include <PubSubClient.h>
 
-### Android Studio  
+### => Android Studio  
 
 1.  Para configuração do Android studio é seguido o seguinte tutorial : https://www.youtube.com/watch?v=suHkmP0oChk .
 2.  Tirando a parte do codigo, a configuração do MQTT, sempre para fazer a ligação com o MQTT, os passos são: (situado na página 'Controlar')
