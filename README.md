@@ -11,6 +11,7 @@
 - [Instalação](#instalação)
 - [Configuração](#configuração)
 - [Repositórios Git](#repositórios)
+- [Vídeo de demonstração](#videodedemonstracao)
 - [Testes](#testes)
 - [Contacto](#contacto)
 
@@ -68,13 +69,15 @@
  NOta: modo programador, sdk flutter selecionada , sdk dart selecionada, emulador (telemóvel) instalada e criada. 
 
 
-## **Respositórios Git**
+## **Repositórios Git**
 ### Front-end (App)
 - https://github.com/DEISI-ULHT-TFC-2023-24/TFC-DEISI14-IoT_Lab2.0-CGI-Industria.git
 
 ### Back-end (Arduino)
 - https://github.com/AnaWeng-a22205245/TFC_DEISI14-IoT_Lab2.0-CGI-Industria-_ArduinoPart.git
 
+## **Vídeo de demonstração**
+- Link : https://youtu.be/d4dT4sH1530
 
 ## **Testes**
 - Para uso teste da aplicação as credênciais são
